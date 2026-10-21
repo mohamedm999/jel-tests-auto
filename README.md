@@ -80,7 +80,3 @@ npx playwright show-report
 └── README.md
 ```
 
-## 👤 Auteur
-
-- Équipe QA Auto Groupe Barriere
-- Contact : [mkissi-ext@groupebarriere.com](mailto:mkissi-ext@groupebarriere.com)
