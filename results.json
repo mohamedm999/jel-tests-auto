@@ -1,0 +1,147 @@
+{
+  "config": {
+    "configFile": "/Users/mimoun/jel-tests-auto/playwright.config.ts",
+    "rootDir": "/Users/mimoun/jel-tests-auto/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/mimoun/jel-tests-auto/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/mimoun/jel-tests-auto/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.51.1",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "signup/signup.spec.ts",
+      "file": "signup/signup.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Signup no CVIP",
+          "file": "signup/signup.spec.ts",
+          "line": 14,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should be create a new user",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 19517,
+                      "error": {
+                        "message": "Error: apiRequestContext.post: getaddrinfo ENOTFOUND apps-uat.groupebarriere.com\nCall log:\n\u001b[2m  - → POST https://apps-uat.groupebarriere.com/test-utils-api/inbox-read-last-r5-verify-mail\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.35 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 27\u001b[22m\n",
+                        "stack": "Error: apiRequestContext.post: getaddrinfo ENOTFOUND apps-uat.groupebarriere.com\nCall log:\n\u001b[2m  - → POST https://apps-uat.groupebarriere.com/test-utils-api/inbox-read-last-r5-verify-mail\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.35 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 27\u001b[22m\n\n    at /Users/mimoun/jel-tests-auto/tests/signup/signup.spec.ts:74:45",
+                        "location": {
+                          "file": "/Users/mimoun/jel-tests-auto/tests/signup/signup.spec.ts",
+                          "column": 45,
+                          "line": 74
+                        },
+                        "snippet": "  72 |     //if (process.env.PLAYWRIGHT_MODE === \"full\") {\n  73 |     // Find the email in the inbox\n> 74 |     const emailVerification = await request.post(\n     |                                             ^\n  75 |       `https://apps-uat.groupebarriere.com/test-utils-api/inbox-read-last-r5-verify-mail`,\n  76 |       {\n  77 |         data: { email: email },"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mimoun/jel-tests-auto/tests/signup/signup.spec.ts",
+                            "column": 45,
+                            "line": 74
+                          },
+                          "message": "Error: apiRequestContext.post: getaddrinfo ENOTFOUND apps-uat.groupebarriere.com\nCall log:\n\u001b[2m  - → POST https://apps-uat.groupebarriere.com/test-utils-api/inbox-read-last-r5-verify-mail\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.35 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - content-type: application/json\u001b[22m\n\u001b[2m    - content-length: 27\u001b[22m\n\n\n  72 |     //if (process.env.PLAYWRIGHT_MODE === \"full\") {\n  73 |     // Find the email in the inbox\n> 74 |     const emailVerification = await request.post(\n     |                                             ^\n  75 |       `https://apps-uat.groupebarriere.com/test-utils-api/inbox-read-last-r5-verify-mail`,\n  76 |       {\n  77 |         data: { email: email },\n    at /Users/mimoun/jel-tests-auto/tests/signup/signup.spec.ts:74:45"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "{\n  infoUser: {\n    gender: \u001b[32m'Monsieur'\u001b[39m,\n    email: \u001b[32m'Una66@gmail.com'\u001b[39m,\n    password: \u001b[32m'ibCpTxnrmYFqKAp$Aa1'\u001b[39m,\n    birthDate: \u001b[35m1974-03-02T03:26:08.900Z\u001b[39m,\n    lastName: \u001b[32m'Pagac'\u001b[39m,\n    firstName: \u001b[32m'Marta'\u001b[39m\n  },\n  infoAddress: {\n    address: \u001b[32m'Rue de Simiane 93190 Livry-Gargan'\u001b[39m,\n    postcode: \u001b[32m'93190'\u001b[39m,\n    city: \u001b[32m'Livry-Gargan'\u001b[39m,\n    street: \u001b[32m'Rue de Simiane'\u001b[39m\n  }\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-04-23T15:20:55.243Z",
+                      "attachments": [
+                        {
+                          "name": "_prompt-0",
+                          "contentType": "text/markdown",
+                          "body": "IyBJbnN0cnVjdGlvbnMKCi0gRm9sbG93aW5nIFBsYXl3cmlnaHQgdGVzdCBmYWlsZWQuCi0gRXhwbGFpbiB3aHksIGJlIGNvbmNpc2UsIHJlc3BlY3QgUGxheXdyaWdodCBiZXN0IHByYWN0aWNlcy4KLSBQcm92aWRlIGEgc25pcHBldCBvZiBjb2RlIHdpdGggdGhlIGZpeCwgaWYgcG9zc2libGUuCgojIFRlc3QgaW5mbwoKLSBOYW1lOiBTaWdudXAgbm8gQ1ZJUCA+PiBzaG91bGQgYmUgY3JlYXRlIGEgbmV3IHVzZXIKLSBMb2NhdGlvbjogL1VzZXJzL21pbW91bi9qZWwtdGVzdHMtYXV0by90ZXN0cy9zaWdudXAvc2lnbnVwLnNwZWMudHM6MzE6NwoKIyBFcnJvciBkZXRhaWxzCgpgYGAKRXJyb3I6IGFwaVJlcXVlc3RDb250ZXh0LnBvc3Q6IGdldGFkZHJpbmZvIEVOT1RGT1VORCBhcHBzLXVhdC5ncm91cGViYXJyaWVyZS5jb20KQ2FsbCBsb2c6CiAgLSDihpIgUE9TVCBodHRwczovL2FwcHMtdWF0Lmdyb3VwZWJhcnJpZXJlLmNvbS90ZXN0LXV0aWxzLWFwaS9pbmJveC1yZWFkLWxhc3QtcjUtdmVyaWZ5LW1haWwKICAgIC0gdXNlci1hZ2VudDogTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzNC4wLjY5OTguMzUgU2FmYXJpLzUzNy4zNgogICAgLSBhY2NlcHQ6ICovKgogICAgLSBhY2NlcHQtZW5jb2Rpbmc6IGd6aXAsZGVmbGF0ZSxicgogICAgLSBjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb24KICAgIC0gY29udGVudC1sZW5ndGg6IDI3CgogICAgYXQgL1VzZXJzL21pbW91bi9qZWwtdGVzdHMtYXV0by90ZXN0cy9zaWdudXAvc2lnbnVwLnNwZWMudHM6NzQ6NDUKYGBgCgojIFBhZ2Ugc25hcHNob3QKCmBgYHlhbWwKLSAnbGluayAiSm91ZXIgY29tcG9ydGUgZGVzIHJpc3F1ZXMgOiBlbmRldHRlbWVudCwgaXNvbGVtZW50LCBkw6lwZW5kYW5jZS4gUG91ciDDqnRyZSBhaWTDqSwgYXBwZWxleiBsZSAwOS03NC03NS0xMy0xMyAoQXBwZWwgbm9uIHN1cnRheMOpKSInOgogIC0gcGFyYWdyYXBoOiAiSm91ZXIgY29tcG9ydGUgZGVzIHJpc3F1ZXMgOiBlbmRldHRlbWVudCwgaXNvbGVtZW50LCBkw6lwZW5kYW5jZS4iCiAgLSBwYXJhZ3JhcGg6IFBvdXIgw6p0cmUgYWlkw6ksIGFwcGVsZXogbGUgMDktNzQtNzUtMTMtMTMKICAtIHBhcmFncmFwaDogKEFwcGVsIG5vbiBzdXJ0YXjDqSkKLSBsaXN0Ci0gbWFpbjoKICAtIGhlYWRpbmcgIkRlcm5pw6hyZSDDqXRhcGUgISIgW2xldmVsPTFdCiAgLSBjaGVja2JveCAiSmUgc291aGFpdGUgcmVjZXZvaXIgZGVzIGNvbW11bmljYXRpb25zLCBvZmZyZXMgZXQgcHJvbW90aW9ucyBkZSBsYSBwYXJ0IGRlcyBDYXNpbm9zIEJhcnJpw6hyZSAocGFyIHZvaWUgcG9zdGFsZSwgcGFyIGVtYWlsIGV0L291IFNNUykiCiAgLSBwYXJhZ3JhcGg6IEplIHNvdWhhaXRlIHJlY2V2b2lyIGRlcyBjb21tdW5pY2F0aW9ucywgb2ZmcmVzIGV0IHByb21vdGlvbnMgZGUgbGEgcGFydCBkZXMgQ2FzaW5vcyBCYXJyacOocmUgKHBhciB2b2llIHBvc3RhbGUsIHBhciBlbWFpbCBldC9vdSBTTVMpCiAgLSBidXR0b24gIkNyw6llciBtb24gY29tcHRlIgogIC0gaW1nICJVbiBib251cyBkZSBiaWVudmVudWUgZGUgMTAw4oKsIHZvdXMgZXN0IG9mZmVydCBkw6hzIDEwMOKCrCBkZSBtaXNlcy4iCiAgLSBsaW5rICJFbiBzYXZvaXIgcGx1cyIKLSBidXR0b24gIk9wZW4gTmV4dC5qcyBEZXYgVG9vbHMiOgogIC0gaW1nCi0gYnV0dG9uICJPcGVuIGlzc3VlcyBvdmVybGF5IjogMyBJc3N1ZQotIGJ1dHRvbiAiQ29sbGFwc2UgaXNzdWVzIGJhZGdlIjoKICAtIGltZwotIGFsZXJ0CmBgYAoKIyBUZXN0IHNvdXJjZQoKYGBgdHMKICAgMSB8IGltcG9ydCB7IGV4cGVjdCB9IGZyb20gIkBwbGF5d3JpZ2h0L3Rlc3QiOwogICAyIHwgaW1wb3J0IHsgdGVzdCB9IGZyb20gIi4uL2ZpeHR1cmVzIjsKICAgMyB8CiAgIDQgfCBpbXBvcnQgeyBBc2tDaXZpbGl0eVBhZ2UgfSBmcm9tICIuLi8uLi9wYWdlcy9zaWdudXAvYXNrQ2l2aWxpdHkvcGFnZSI7CiAgIDUgfCBpbXBvcnQgeyBCaXJ0aFBsYWNlUGFnZSB9IGZyb20gIi4uLy4uL3BhZ2VzL3NpZ251cC9iaXJ0aFBsYWNlL3BhZ2UiOwogICA2IHwgaW1wb3J0IHsgR3JlZXRQYWdlIH0gZnJvbSAiLi4vLi4vcGFnZXMvc2lnbnVwL2dyZWV0L3BhZ2UiOwogICA3IHwgaW1wb3J0IHsgT3B0aW5zUGFnZSB9IGZyb20gIi4uLy4uL3BhZ2VzL3NpZ251cC9vcHRpbnMvcGFnZSI7CiAgIDggfCBpbXBvcnQgeyBTaWduVXBQYWdlIH0gZnJvbSAiLi4vLi4vcGFnZXMvc2lnbnVwL3BhZ2UiOwogICA5IHwgaW1wb3J0IHsgUG9zdGFsQWRyZXNzUGFnZSB9IGZyb20gIi4uLy4uL3BhZ2VzL3NpZ251cC9wb3N0YWxBZHJlc3MvcGFnZSI7CiAgMTAgfCBpbXBvcnQgeyBnZW5lcmF0ZVJhbmRvbUJpcnRoRGF0ZSB9IGZyb20gIi4uLy4uL3V0aWxzL2Zha2VEYXRhcyI7CiAgMTEgfCBpbXBvcnQgeyBNT0JJTEVfV0lEVEggfSBmcm9tICIuLi8uLi91dGlscy9jb25zdGFudHMiOwogIDEyIHwgaW1wb3J0IHsgVXRpbHMgfSBmcm9tICIuLi8uLi91dGlscy9oZWxwZXJzIjsKICAxMyB8CiAgMTQgfCB0ZXN0LmRlc2NyaWJlKCJTaWdudXAgbm8gQ1ZJUCIsICgpID0+IHsKICAxNSB8ICAgdGVzdC5iZWZvcmVFYWNoKGFzeW5jICh7IHBhZ2UgfSkgPT4gewogIDE2IHwgICAgIGF3YWl0IHBhZ2UuZ290bygiL2ZyL3NpZ251cCIpOwogIDE3IHwgICAgIGlmIChwcm9jZXNzLmVudi5FTlYgIT09ICJMT0NBTCIpIHsKICAxOCB8ICAgICAgIGF3YWl0IHBhZ2UubG9jYXRvcignW25hbWU9InBhc3N3b3JkIl0nKS5maWxsKCJHbGJKZWwyMDI0TmV0bGlmeSIpOwogIDE5IHwgICAgICAgYXdhaXQgcGFnZS5nZXRCeVJvbGUoImJ1dHRvbiIsIHsgbmFtZTogIlN1Ym1pdCIgfSkuY2xpY2soKTsKICAyMCB8ICAgICB9CiAgMjEgfCAgIH0pOwogIDIyIHwKICAyMyB8ICAgdGVzdC5hZnRlckVhY2goYXN5bmMgKHsgdGVzdERhdGEgfSwgdGVzdEluZm8pID0+IHsKICAyNCB8ICAgICBpZiAodGVzdEluZm8uc3RhdHVzICE9PSB0ZXN0SW5mby5leHBlY3RlZFN0YXR1cykgewogIDI1IHwgICAgICAgY29uc29sZS5sb2codGVzdERhdGEpOwogIDI2IHwgICAgICAgVXRpbHMuc2F2ZURhdGFTY2VuYXJpb0tPKHRlc3RJbmZvLnRpdGxlLCB0ZXN0RGF0YSk7CiAgMjcgfCAgICAgfQogIDI4IHwgICB9KTsKICAyOSB8CiAgMzAgfCAgIC8vIFBhcmNvdXJzIDEuMS4xCiAgMzEgfCAgIHRlc3QoInNob3VsZCBiZSBjcmVhdGUgYSBuZXcgdXNlciIsIGFzeW5jICh7CiAgMzIgfCAgICAgcGFnZSwKICAzMyB8ICAgICB0ZXN0RGF0YSwKICAzNCB8ICAgICByZXF1ZXN0LAogIDM1IHwgICB9LCB0ZXN0SW5mbykgPT4gewogIDM2IHwgICAgIGNvbnN0IGRhdGFBcGkgPSBhd2FpdCBVdGlscy5nZXRBZGRyZXNzKCJydWUiLCA5MzE5MCk7CiAgMzcgfCAgICAgY29uc3Qgdmlld3BvcnRTaXplID0gcGFnZS52aWV3cG9ydFNpemUoKTsKICAzOCB8ICAgICBjb25zdCBkYXRhVXNlciA9IFV0aWxzLmNyZWF0ZVJhbmRvbVVzZXIoKTsKICAzOSB8ICAgICBjb25zdCBlbWFpbCA9IGRhdGFVc2VyLmVtYWlsOwogIDQwIHwgICAgIGNvbnN0IHNpZ251cEluc3RhbmNlID0gbmV3IFNpZ25VcFBhZ2UocGFnZSk7CiAgNDEgfCAgICAgdGVzdERhdGEuaW5mb1VzZXIgPSBkYXRhVXNlcjsKICA0MiB8ICAgICB0ZXN0RGF0YS5pbmZvQWRkcmVzcyA9IGRhdGFBcGk7CiAgNDMgfCAgICAgLy8gU1RFUCAtIGNyZWRlbnRpYWwKICA0NCB8ICAgICBhd2FpdCBzaWdudXBJbnN0YW5jZS5maWxsQ3JlZGVudGlhbHMoZW1haWwsIGRhdGFVc2VyLnBhc3N3b3JkLCBmYWxzZSwgdHJ1ZSk7CiAgNDUgfCAgICAgYXdhaXQgc2lnbnVwSW5zdGFuY2Uuc3VibWl0KCk7CiAgNDYgfCAgICAgLy8gU1RFUCAtIGFzayBjaXZpbGl0eQogIDQ3IHwgICAgIGNvbnN0IGFza0NpdmlsaXR5SW5zdGFuY2UgPSBuZXcgQXNrQ2l2aWxpdHlQYWdlKHBhZ2UpOwogIDQ4IHwgICAgIGF3YWl0IGFza0NpdmlsaXR5SW5zdGFuY2UudmlzaWJsZSgpOwogIDQ5IHwgICAgIGF3YWl0IGFza0NpdmlsaXR5SW5zdGFuY2UuZmlsbEZvcm0oCiAgNTAgfCAgICAgICBkYXRhVXNlci5nZW5kZXIsCiAgNTEgfCAgICAgICBkYXRhVXNlci5maXJzdE5hbWUsCiAgNTIgfCAgICAgICBkYXRhVXNlci5sYXN0TmFtZSwKICA1MyB8ICAgICAgIGRhdGFVc2VyLmJpcnRoRGF0ZQogIDU0IHwgICAgICk7CiAgNTUgfCAgICAgYXdhaXQgYXNrQ2l2aWxpdHlJbnN0YW5jZS5zdWJtaXQoKTsKICA1NiB8ICAgICAvLyBTVEVQIC0gYmlydGhQbGFjZQogIDU3IHwgICAgIGNvbnN0IGJpcnRoUGxhY2VJbnN0YW5jZSA9IG5ldyBCaXJ0aFBsYWNlUGFnZShwYWdlKTsKICA1OCB8ICAgICBhd2FpdCBiaXJ0aFBsYWNlSW5zdGFuY2UudmlzaWJsZSgpOwogIDU5IHwgICAgIGF3YWl0IGJpcnRoUGxhY2VJbnN0YW5jZS5maWxsRm9ybSgpOwogIDYwIHwgICAgIGF3YWl0IGJpcnRoUGxhY2VJbnN0YW5jZS5zdWJtaXQoKTsKICA2MSB8ICAgICAvLyBTVEVQIC0gcG9zdGFsQWRkcmVzcwogIDYyIHwgICAgIGNvbnN0IHBvc3RhbEFkcmVzc2VJbnN0YW5jZSA9IG5ldyBQb3N0YWxBZHJlc3NQYWdlKHBhZ2UpOwogIDYzIHwgICAgIGF3YWl0IHBvc3RhbEFkcmVzc2VJbnN0YW5jZS52aXNpYmxlKCk7CiAgNjQgfCAgICAgYXdhaXQgcG9zdGFsQWRyZXNzZUluc3RhbmNlLmZpbGxGb3JtKGRhdGFBcGksICI2MDAwMDExMTEiKTsKICA2NSB8ICAgICBhd2FpdCBwb3N0YWxBZHJlc3NlSW5zdGFuY2Uuc3VibWl0KAogIDY2IHwgICAgICAgISEodmlld3BvcnRTaXplICYmIHZpZXdwb3J0U2l6ZS53aWR0aCA8PSBNT0JJTEVfV0lEVEgpCiAgNjcgfCAgICAgKTsKICA2OCB8CiAgNjkgfCAgICAgYXdhaXQgcGFnZS5sb2NhdG9yKCdbZGF0YS10ZXN0aWQ9InByb2NlZWQiXScpLmNsaWNrKCk7CiAgNzAgfAogIDcxIHwgICAgIGF3YWl0IHBhZ2Uud2FpdEZvclRpbWVvdXQoMjAwMCk7CiAgNzIgfCAgICAgLy9pZiAocHJvY2Vzcy5lbnYuUExBWVdSSUdIVF9NT0RFID09PSAiZnVsbCIpIHsKICA3MyB8ICAgICAvLyBGaW5kIHRoZSBlbWFpbCBpbiB0aGUgaW5ib3gKPiA3NCB8ICAgICBjb25zdCBlbWFpbFZlcmlmaWNhdGlvbiA9IGF3YWl0IHJlcXVlc3QucG9zdCgKICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXiBFcnJvcjogYXBpUmVxdWVzdENvbnRleHQucG9zdDogZ2V0YWRkcmluZm8gRU5PVEZPVU5EIGFwcHMtdWF0Lmdyb3VwZWJhcnJpZXJlLmNvbQogIDc1IHwgICAgICAgYGh0dHBzOi8vYXBwcy11YXQuZ3JvdXBlYmFycmllcmUuY29tL3Rlc3QtdXRpbHMtYXBpL2luYm94LXJlYWQtbGFzdC1yNS12ZXJpZnktbWFpbGAsCiAgNzYgfCAgICAgICB7CiAgNzcgfCAgICAgICAgIGRhdGE6IHsgZW1haWw6IGVtYWlsIH0sCiAgNzggfCAgICAgICB9CiAgNzkgfCAgICAgKTsKICA4MCB8ICAgICBleHBlY3QoZW1haWxWZXJpZmljYXRpb24ub2soKSkudG9CZVRydXRoeSgpOwogIDgxIHwgICAgIGNvbnN0IHsgdmVyaWZ5X2VtYWlsX2xpbms6IGxpbmsgfSA9IChhd2FpdCBlbWFpbFZlcmlmaWNhdGlvbi5qc29uKCkpIGFzIHsKICA4MiB8ICAgICAgIHZlcmlmeV9lbWFpbF9saW5rOiBzdHJpbmc7CiAgODMgfCAgICAgfTsKICA4NCB8ICAgICBhd2FpdCBwYWdlLmdvdG8obGluayk7CiAgODUgfCAgICAgYXdhaXQgcGFnZS53YWl0Rm9yVGltZW91dCgxMDAwMCk7CiAgODYgfCAgICAgLy99CiAgODcgfCAgIH0pOwogIDg4IHwgfSk7CiAgODkgfApgYGA="
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mimoun/jel-tests-auto/tests/signup/signup.spec.ts",
+                        "column": 45,
+                        "line": 74
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "49701a938748172a4ef0-92e643f5ef24e4db2058",
+              "file": "signup/signup.spec.ts",
+              "line": 31,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-04-23T15:20:53.532Z",
+    "duration": 22014.902,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

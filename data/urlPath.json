@@ -1,0 +1,53 @@
+{
+  "homePage": {
+    "urlPath": "/"
+  },
+  "signUpPage": {
+    "urlPath": "signup"
+  },
+  "loginPage": {
+    "urlPath": "login"
+  },
+  "forgotPasswordPage": {
+    "urlPath": "forgotPassword"
+  },
+  "profilPage": {
+    "urlPath": "account/profile"
+  },
+  "documentsPage": {
+    "urlPath": "account/documents"
+  },
+  "historicPage": {
+    "urlPath": "account/historic"
+  },
+  "limitsPage": {
+    "urlPath": "account/limits"
+  },
+  "communicationsPage": {
+    "urlPath": "account/communications"
+  },
+  "twister": {
+    "urlPath": "twister"
+  },
+  "promotions": {
+    "urlPath": "promotions"
+  },
+  "downloadApp": {
+    "urlPath": "download"
+  },
+  "formatsPage": {
+    "urlPath": "variants"
+  },
+  "loyaltyPage": {
+    "urlPath": "loyalty"
+  },
+  "preventionPage": {
+    "urlPath": "prevention"
+  },
+  "groupePage": {
+    "urlPath": "groupe-barrier"
+  },
+  "blogPage": {
+    "urlPath": "blog"
+  }
+}

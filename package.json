@@ -1,0 +1,51 @@
+{
+  "name": "jel-tests-auto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/groupe-lucien-barriere/online-apps/jel-tests-auto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/groupe-lucien-barriere/online-apps/jel-tests-auto/issues"
+  },
+  "homepage": "https://gitlab.com/groupe-lucien-barriere/online-apps/jel-tests-auto#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@percy/cli": "^1.32.7",
+    "@percy/playwright": "^1.1.2",
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.14.1",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.10.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "playwright-ctrf-json-reporter": "^0.0.26",
+    "prettier": "^3.8.3",
+    "slack-ctrf": "^0.0.31"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@faker-js/faker": "^9.7.0",
+    "axios": "^1.9.0",
+    "easy-yopmail": "^5.2.2",
+    "mailtrap": "^4.4.0",
+    "twilio": "^5.9.0"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "prettier --write",
+      "eslint"
+    ]
+  }
+}

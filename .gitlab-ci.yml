@@ -1,0 +1,501 @@
+default:
+  tags:
+    - glb-devops-gitlab-runner
+  interruptible: true
+
+stages:
+  # - setupEnv
+  # - test
+  - visual
+  # - notify
+  # - report
+  - locker
+
+variables:
+  TEST_ENVIRONMENT: "develop"
+  SLACK_WEBHOOK_URL: "$SLACK_WEBHOOK_URL"
+  SLACK_WEBHOOK_ACCOUNT_URL_DEVELOP: "$SLACK_WEBHOOK_ACCOUNT_URL_DEVELOP"
+  SLACK_WEBHOOK_ACCOUNT_URL_PREPROD: "$SLACK_WEBHOOK_ACCOUNT_URL_PREPROD"
+
+.playwright_template: &playwright_template
+  image: mcr.microsoft.com/playwright:v1.51.1-jammy
+  before_script:
+    - apt-get update && apt-get install -y jq
+    - npm install
+    - npx playwright install
+  artifacts:
+    paths:
+      - playwright-report/
+    when: always
+
+# ═══════════════════════════════════════════
+# STAGE 1 — setupEnv
+# ═══════════════════════════════════════════
+
+# job-setup-env:
+#   <<: *playwright_template
+#   stage: setupEnv
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - ENV=$TEST_ENVIRONMENT npx playwright test setupEnv.spec.ts --project=chromium-local --workers=1
+#   artifacts:
+#     when: always
+#     paths:
+#       - .auth/
+#       - data/credentials.json
+#       - playwright-report/
+#     expire_in: 1 day
+
+# ═══════════════════════════════════════════
+# STAGE 2 — test (disabled for now, kept for later — testing visual stage only)
+# ═══════════════════════════════════════════
+
+# 1 — Desktop Account (runs first after setup)
+# job-desktop-account:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_desktop_account.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=chromium-account --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_desktop_account.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_desktop_account.txt
+#       - status_job_id_desktop_account.txt
+#       - results_test_desktop_account.txt
+#       - ctrf/ctrf-report-desktop-account.json
+
+# 2 — Desktop Poker (waits for desktop-account)
+# job-desktop-poker:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-desktop-account
+#       artifacts: false
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_desktop.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=chromium-poker --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_desktop_poker.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_desktop_poker.txt
+#       - status_job_id_desktop_poker.txt
+#       - results_test_desktop_poker.txt
+#       - ctrf/ctrf-report-desktop-poker.json
+
+# 3 — Mobile (waits for desktop-poker)
+# job-mobile:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-desktop-poker
+#       artifacts: false
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_mobile.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=chrome-mobile --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_mobile.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_mobile.txt
+#       - status_job_id_mobile.txt
+#       - results_test_mobile.txt
+#       - ctrf/ctrf-report-mobile.json
+
+# 4 — Safari Mobile (waits for mobile)
+# job-safari-mobile:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-mobile
+#       artifacts: false
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_safari_mobile.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=safari-mobile --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_safari_mobile.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_safari_mobile.txt
+#       - status_job_id_safari_mobile.txt
+#       - results_test_safari.txt
+#       - ctrf/ctrf-report-safari.json
+
+# 5 — Web View (waits for safari-mobile)
+# job-web-view:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-safari-mobile
+#       artifacts: false
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_webview.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=chrome-webview --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_webview.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_webview.txt
+#       - status_job_id_webview.txt
+#       - results_test_web_view.txt
+#       - ctrf/ctrf-report-web-view.json
+
+# 6 — Accessibility (waits for web-view, runs last)
+# job-accessibility:
+#   <<: *playwright_template
+#   stage: test
+#   allow_failure: true
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-web-view
+#       artifacts: false
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo "Running accessibility scans"
+#     - echo $CI_JOB_ID >> reports_job_id_accessibility.txt
+#     - npm install axe-html-reporter --save-dev
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=chrome-accessibility
+#     - node utils/generate-a11y-html.ts
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_accessibility.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report/
+#       - a11y-report.html
+#       - reports_job_id_accessibility.txt
+#       - status_job_id_accessibility.txt
+#       - results_test_accessibility.txt
+#       - ctrf/ctrf-report-accessibility.json
+
+# job-firefox:
+#   <<: *playwright_template
+#   stage: test
+#   needs:
+#     - job: job-setup-env
+#       artifacts: true
+#     - job: job-safari-mobile
+#       optional: true
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   script:
+#     - echo $CI_JOB_ID >> reports_job_id_firefox.txt
+#     - ENV=$TEST_ENVIRONMENT npx playwright test --project=firefox --workers=1
+#   after_script:
+#     - echo $CI_JOB_STATUS >> status_job_id_firefox.txt
+#   artifacts:
+#     when: always
+#     paths:
+#       - playwright-report
+#       - reports_job_id_firefox.txt
+#       - status_job_id_firefox.txt
+#       - results_test_firefox.txt
+#       - ctrf/ctrf-report-firefox.json
+
+# ═══════════════════════════════════════════
+# STAGE — visual (Percy visual regression testing)
+# Requires PERCY_TOKEN set as a masked/protected CI/CD variable in
+# GitLab (Settings > CI/CD > Variables) — never commit the token itself.
+# ═══════════════════════════════════════════
+job-visual-testing:
+  <<: *playwright_template
+  stage: visual
+  allow_failure: true
+  # needs:
+  #   - job: job-setup-env
+  #     artifacts: true
+  script:
+    - echo $CI_JOB_ID >> reports_job_id_visual.txt
+    - ENV=$TEST_ENVIRONMENT npx percy exec -- npx playwright test --project=chromium-account -g "@visual" --workers=1
+  after_script:
+    - echo $CI_JOB_STATUS >> status_job_id_visual.txt
+  artifacts:
+    when: always
+    paths:
+      - playwright-report
+      - reports_job_id_visual.txt
+      - status_job_id_visual.txt
+
+# ═══════════════════════════════════════════
+# STAGE — notify (disabled for now, kept for later — testing visual stage only)
+# ═══════════════════════════════════════════
+
+# notify_slack_job-desktop-account:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-desktop-account
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     - |
+#       if [ "$TEST_ENVIRONMENT" = "develop" ]; then
+#         SLACK_WEBHOOK="$SLACK_WEBHOOK_ACCOUNT_URL_DEVELOP"
+#       elif [ "$TEST_ENVIRONMENT" = "pre-prod" ]; then
+#         SLACK_WEBHOOK="$SLACK_WEBHOOK_ACCOUNT_URL_PREPROD"
+#       else
+#         echo "Unknown TEST_ENVIRONMENT: $TEST_ENVIRONMENT"
+#         exit 1
+#       fi
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "$SLACK_WEBHOOK" --title "Test Report - Chrome Desktop Account"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+# notify_slack_job-desktop-poker:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-desktop-poker
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Account"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+# notify_slack_job-mobile:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-mobile
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Account"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+# notify_slack_job-safari-mobile:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-safari-mobile
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Account"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+# notify_slack_job-web-view:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-web-view
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Account"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+# notify_slack_job-accessibility:
+#   stage: notify
+#   rules:
+#     - if: '$TEST_STAGE == "looker"'
+#       when: never
+#     - when: always
+#   image: mcr.microsoft.com/playwright:v1.51.1-jammy
+#   needs:
+#     - job: job-accessibility
+#   script:
+#     - |
+#       echo $CI_JOB_ID > ref_id.txt
+#     - apt-get update && apt-get install -y bash
+#     - REPORT_URL="$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/file/playwright-report/index.html"
+#     - PIPELINE_URL="$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-poker.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Poker"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-desktop-account.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Desktop Account"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-mobile.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Chrome Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-safari.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Safari Mobile"
+#     #- CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-web-view.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Web View"
+#     # - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-firefox.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Firefox Desktop"
+#     - CTRF_SKIP_FOOTER=true npx slack-ctrf results ctrf/ctrf-report-accessibility.json --webhookUrl "${SLACK_WEBHOOK_URL}" --title "Test Report - Accessibility Desktop"
+
+#   allow_failure: true
+
+weekly_slack_notification:
+  stage: locker
+  image: alpine:latest
+  rules:
+    - if: '$TEST_STAGE == "looker"'
+      when: on_success
+  before_script:
+    - apk add --no-cache curl jq bash
+  script:
+    - |
+      SLACK_WEBHOOK_BASEURL=${SLACK_WEBHOOK_BASEURL:-}
+      SLACK_WEBHOOK_TOKEN_DEVELOP=${SLACK_WEBHOOK_TOKEN_DEVELOP:-}
+      SLACK_WEBHOOK_TOKEN_PREPROD=${SLACK_WEBHOOK_TOKEN_PREPROD:-}
+
+      if [ "$TEST_ENVIRONMENT" = "develop" ]; then
+        SLACK_WEBHOOK_URL="$SLACK_WEBHOOK_BASEURL$SLACK_WEBHOOK_TOKEN_DEVELOP"
+      elif [ "$TEST_ENVIRONMENT" = "pre-prod" ]; then
+        SLACK_WEBHOOK_URL="$SLACK_WEBHOOK_BASEURL$SLACK_WEBHOOK_TOKEN_PREPROD"
+      fi
+
+      CURRENT_DATE=$(date +"%Y-%m-%d")
+
+      cat > payload.json <<EOF
+      {
+        "text": "✨ Nouveau rapport de suivi disponible ✨\n\n> Vous pouvez consulter le rapport de suivi du projet automatisation JEL \n> 🌟 *Merci de votre attention* 🌟",
+        "blocks": [
+          { "type": "divider" },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "✨ *Nouveau rapport de suivi disponible* ✨"
+            }
+          },
+          { "type": "divider" },
+          {
+          "type": "section",
+          "text": {
+              "type": "mrkdwn",
+              "text": "📊 Voici le rapport de suivi.\n ✨ Consultez les détails pour obtenir les informations sur le projet d'automatisation JEL. ✨ "
+          },
+          "accessory": {
+              "type": "button",
+              "text": {
+              "type": "plain_text",
+              "text": "Click Me",
+              "emoji": true
+              },
+              "value": "click_me_123",
+              "url": "https://lookerstudio.google.com/s/pAK_DlXO6hw",
+              "action_id": "button-action"
+          }
+          }
+        ]
+      }
+      EOF
+
+      echo "Sending weekly notification to Slack..."
+      curl -X POST -H "Content-Type: application/json" \
+           --data @payload.json \
+           $SLACK_WEBHOOK_URL
+  when: always
+  allow_failure: true
